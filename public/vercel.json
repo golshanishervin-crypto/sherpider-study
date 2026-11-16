@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/sb/:path*", "destination": "https://ipagkuramdxouavavexr.supabase.co/:path*" },
+    { "source": "/((?!sb/).*)", "destination": "/index.html" }
+  ]
+}

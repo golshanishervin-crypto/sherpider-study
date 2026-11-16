@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Sherpider-Study</string>
+    <string name="title_activity_main">Sherpider-Study</string>
+    <string name="package_name">com.sherpider.study</string>
+    <string name="custom_url_scheme">com.sherpider.study</string>
+</resources>

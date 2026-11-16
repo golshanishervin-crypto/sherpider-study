@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: 'Vazirmatn', sans-serif;
+  }
+  html[lang='en'] {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* 🌟 پس‌زمینه رنگی و بافت‌دار برای دیده شدن افکت شیشه‌ای */
+  body {
+    @apply text-ink antialiased transition-colors duration-300;
+    background-color: #f5f5f5;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(229, 57, 53, 0.25) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(229, 57, 53, 0.15) 0%, transparent 40%),
+      radial-gradient(rgba(229, 57, 53, 0.15) 1.5px, transparent 1.5px);
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+    background-attachment: fixed;
+  }
+
+  /* حالت تاریک */
+  html.dark body {
+    @apply bg-neutral-950 text-neutral-100;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(229, 57, 53, 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(229, 57, 53, 0.2) 0%, transparent 40%),
+      radial-gradient(rgba(229, 57, 53, 0.3) 1.5px, transparent 1.5px);
+  }
+}
+
+@layer components {
+  /* 🌟 کارت‌های شیشه‌ای شفاف‌تر با حاشیه نوری */
+  .card {
+    @apply bg-white/30 dark:bg-neutral-900/30 backdrop-blur-xl rounded-card 
+           shadow-[0_8px_32px_0_rgba(31,38,135,0.1)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] 
+           border border-white/60 dark:border-white/10 
+           p-4 transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-primary/90 backdrop-blur-md text-white px-4 py-2 rounded-input font-medium shadow-lg shadow-primary/30
+           hover:bg-primary active:scale-95 transition-all
+           disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+  }
+}
