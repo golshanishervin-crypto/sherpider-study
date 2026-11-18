@@ -18,29 +18,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          
-      # این خط جادویی فایل ویندوزی رو پاک می‌کنه
-      - name: Remove package-lock.json
-        run: rm -f package-lock.json
-        
-      - name: Install dependencies
-        run: npm install --force
-        
+          node-version: 22
+
+      # این بخش جادویی، پکیج‌های ویندوزی رو کاملاً پاک می‌کنه
+      - name: Clean install
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
       - name: Build
         run: npm run build
-        
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
-          
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
