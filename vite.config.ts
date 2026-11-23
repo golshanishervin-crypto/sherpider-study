@@ -2,8 +2,19 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// تنظیمات پروکسی برای اتصال به Supabase در زمان اجرای لوکال
+const supabaseProxy = {
+  '/api/supabase': {
+    target: 'https://ipagkuramdxouavavexr.supabase.co',
+    changeOrigin: true,
+    secure: true,
+    ws: true,
+    rewrite: (path: string) => path.replace(/^\/api\/supabase/, ''),
+  },
+}
+
 export default defineConfig({
-  base:'/sherpider-study/',
+  base: '/sherpider-study/',
   plugins: [
     react(),
     VitePWA({
@@ -12,7 +23,7 @@ export default defineConfig({
       manifest: {
         name: 'Sherpider-Study',
         short_name: 'Sherpider',
-        description: 'برنامه مدیریت تحصیلی شرشپایدر استادی',
+        description: 'برنامه مدیریت تحصیلی شرپایدر استادی',
         theme_color: '#E53935',
         background_color: '#ffffff',
         display: 'standalone',
@@ -21,12 +32,27 @@ export default defineConfig({
         id: '/',
         start_url: '/',
         icons: [
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
         ]
       },
       workbox: {
+        // این خط بسیار مهم است! به PWA می‌گوید درخواست‌های API را کش یا بلاک نکن
+        navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
@@ -35,7 +61,7 @@ export default defineConfig({
               cacheName: 'supabase-api-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 7
+                maxAgeSeconds: 60 * 60 * 24 * 7 // یک هفته
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -47,8 +73,13 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts-cache',
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-              cacheableResponse: { statuses: [0, 200] }
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // یک سال
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
             }
           }
         ]
@@ -58,7 +89,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // 🌟 استفاده از حالت تابعی برای جلوگیری از خطای TypeScript
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('recharts')) return 'charts'
@@ -70,26 +100,14 @@ export default defineConfig({
       }
     }
   },
-server: {
-  port: 5173,
-  open: true,
-  proxy: {
-    '/sb': {
-      target: 'https://ipagkuramdxouavavexr.supabase.co',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/sb/, '')
-    }
+  server: {
+    port: 5173,
+    open: true,
+    proxy: supabaseProxy
+  },
+  preview: {
+    port: 4173,
+    open: true,
+    proxy: supabaseProxy
   }
-},
-preview: {
-  port: 4173,
-  open: true,
-  proxy: {
-    '/sb': {
-      target: 'https://ipagkuramdxouavavexr.supabase.co',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/sb/, '')
-    }
-  }
-},
 })
