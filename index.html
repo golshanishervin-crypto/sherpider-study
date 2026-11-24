@@ -10,7 +10,8 @@
   }
   window.addEventListener('error', function (e) {
     if (e.target && e.target !== window && (e.target.src || e.target.href)) {
-      showErr('LOAD FAILED: ' + (e.target.src || e.target.href))
+      var tag = String(e.target.tagName || '').toUpperCase()
+      if (tag === 'SCRIPT' || tag === 'LINK') showErr('LOAD FAILED: ' + (e.target.src || e.target.href))
       return
     }
     showErr('ERROR: ' + (e.message || '') + '\n' + (e.filename || '') + ':' + (e.lineno || ''))
