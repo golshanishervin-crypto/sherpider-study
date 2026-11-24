@@ -24,12 +24,23 @@ jobs:
 
       - name: Build Web App
         run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Generate App Icon
+        run: |
+          if [ -f assets/icon-only.png ]; then
+            npx --yes @capacitor/assets generate --android --iconBackgroundColor '#05060f' --iconBackgroundColorDark '#05060f' --splashBackgroundColor '#05060f' --splashBackgroundColorDark '#05060f'
+          else
+            echo "assets/icon-only.png not found - skipping"
+          fi
 
       - name: Sync Capacitor
         run: npx cap sync android

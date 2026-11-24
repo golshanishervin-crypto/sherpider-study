@@ -14,7 +14,7 @@ const supabaseProxy = {
 }
 
 export default defineConfig({
-  base: '/sherpider-study/',
+  base: './',
   plugins: [
     react(),
     VitePWA({
