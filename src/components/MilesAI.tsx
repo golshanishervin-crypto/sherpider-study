@@ -61,7 +61,7 @@ export default function MilesAI({ user, onNavigate }: { user: any, onNavigate: (
       supabase.from('study_sessions').select('duration_minutes').eq('user_id', user.id).gte('date', localDateStr + 'T00:00:00')
     ])
     
-    const minutes = ssRes.data?.reduce((sum, s) => sum + s.duration_minutes, 0) || 0
+    const minutes = ssRes.data?.reduce((sum:any, s:any) => sum + s.duration_minutes, 0) || 0
     return { 
       homework: hwRes.data || [], 
       exams: exRes.data || [], 
@@ -103,20 +103,33 @@ const miles = useMemo(() => createMiles({
   }, [isOpen, hasProacted, miles])
 
   const send = async (text: string) => {
-    if (!text.trim() || isTyping) return
-    setInput('')
-    addMessage('user', text)
-    setIsTyping(true)
+  if (!text.trim()) return;
+  addMessage('user', text);
+  setIsTyping(true);
 
-    try {
-      const r = await miles.reply(text)
-      addMessage('ai', r.text, r.quickReplies)
-    } catch (error) {
-      addMessage('ai', 'مشکلی پیش اومد! دوباره امتحان کن.')
-    } finally {
-      setIsTyping(false)
-    }
+  try {
+    const response = await fetch('https://keylessai.thryx.workers.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages: [
+          { role: 'system', content: 'تو مایلز هستی، دستیار هوشمند و صمیمی دانش‌آموزان. فارسی و کوتاه جواب بده.' },
+          { role: 'user', content: text }
+        ]
+      })
+    });
+    
+    const data = await response.json();
+    addMessage('ai', data.choices[0].message.content);
+    
+  } catch (error) {
+    addMessage('ai', 'مشکلی پیش اومد! دوباره امتحان کن.');
+  } finally {
+    setIsTyping(false);
   }
+}
+
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault()

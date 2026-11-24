@@ -1,4 +1,3 @@
-// یک دیتابیس محلی کامل که جایگزین Supabase شده است
 export const supabase = {
   auth: {
     signUp: async ({ email, password }: any) => {
@@ -43,21 +42,17 @@ export const supabase = {
     const builder = {
       select: (cols?: string) => builder,
       
-      eq: (col: string, val: any) => { 
-        filters.push({col, val}); 
-        return builder; 
-      },
+      eq: (col: string, val: any) => { filters.push({type: 'eq', col, val}); return builder; },
+      gte: (col: string, val: any) => { filters.push({type: 'gte', col, val}); return builder; },
+      lte: (col: string, val: any) => { filters.push({type: 'lte', col, val}); return builder; },
+      gt: (col: string, val: any) => { filters.push({type: 'gt', col, val}); return builder; },
+      lt: (col: string, val: any) => { filters.push({type: 'lt', col, val}); return builder; },
       
       order: (col: string, opts?: { ascending: boolean }) => { 
-        orderCol = col; 
-        orderAsc = opts?.ascending ?? true; 
-        return builder; 
+        orderCol = col; orderAsc = opts?.ascending ?? true; return builder; 
       },
       
-      limit: (n: number) => { 
-        limitNum = n; 
-        return builder; 
-      },
+      limit: (n: number) => { limitNum = n; return builder; },
       
       single: async () => {
          const res = await builder.execute();
@@ -66,9 +61,16 @@ export const supabase = {
       
       execute: async () => {
         let data = JSON.parse(localStorage.getItem('db_' + table) || '[]');
+        
+        // اعمال فیلترها
         for (const f of filters) {
-          data = data.filter((d: any) => d[f.col] === f.val);
+          if (f.type === 'eq') data = data.filter((d: any) => d[f.col] === f.val);
+          if (f.type === 'gte') data = data.filter((d: any) => d[f.col] >= f.val);
+          if (f.type === 'lte') data = data.filter((d: any) => d[f.col] <= f.val);
+          if (f.type === 'gt') data = data.filter((d: any) => d[f.col] > f.val);
+          if (f.type === 'lt') data = data.filter((d: any) => d[f.col] < f.val);
         }
+        
         if (orderCol) {
           data.sort((a: any, b: any) => orderAsc ? (a[orderCol] > b[orderCol] ? 1 : -1) : (a[orderCol] < b[orderCol] ? 1 : -1));
         }
@@ -76,12 +78,11 @@ export const supabase = {
         return { data, error: null };
       },
       
-      // برای اینکه await مستقیم روی builder کار کنه
       then: (resolve: any) => { builder.execute().then(resolve); },
       
       insert: async (val: any) => {
         const current = JSON.parse(localStorage.getItem('db_' + table) || '[]');
-        const newItems = Array.isArray(val) ? val : [val];
+const newItems = Array.isArray(val) ? val : [val];
         const saved = newItems.map((item: any) => ({...item, id: item.id || Date.now().toString()}));
         localStorage.setItem('db_' + table, JSON.stringify([...current, ...saved]));
         return { data: saved, error: null };
@@ -91,7 +92,7 @@ export const supabase = {
          eq: async (col: string, valEq: any) => {
            const current = JSON.parse(localStorage.getItem('db_' + table) || '[]');
            const updated = current.map((item: any) => item[col] === valEq ? { ...item, ...val } : item);
-localStorage.setItem('db_' + table, JSON.stringify(updated));
+           localStorage.setItem('db_' + table, JSON.stringify(updated));
            return { data: updated, error: null };
          }
       }),

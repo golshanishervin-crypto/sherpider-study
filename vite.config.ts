@@ -19,7 +19,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      injectRegister:null,
       manifest: {
         name: 'Sherpider-Study',
         short_name: 'Sherpider',

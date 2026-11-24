@@ -34,9 +34,9 @@ export default function ProfilePage({ user, onLogout, darkMode, toggleTheme, upd
       const { count: exCount } = await supabase.from('exams').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
       const { data: ss } = await supabase.from('study_sessions').select('duration_minutes').eq('user_id', user.id);
 
-      const completedHw = hw?.filter(h => h.status === 'completed').length || 0;
+      const completedHw = hw?.filter((h:any) => h.status === 'completed').length || 0;
       const totalHw = hw?.length || 0;
-      const totalMinutes = ss?.reduce((sum, s) => sum + s.duration_minutes, 0) || 0;
+      const totalMinutes = ss?.reduce((sum:any, s:any) => sum + s.duration_minutes, 0) || 0;
       
       const hours = Math.floor(totalMinutes / 60);
       const mins = totalMinutes % 60;

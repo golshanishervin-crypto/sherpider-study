@@ -71,8 +71,8 @@ export default function DashboardPage({ user, onNavigate }: { user: any, onNavig
         }
 
         const sessions = ssRes.data || []
-        const todayMinutes = sessions.filter(s => s.date.startsWith(localDateStr)).reduce((sum, s) => sum + s.duration_minutes, 0)
-        const totalMinutes = sessions.reduce((sum, s) => sum + s.duration_minutes, 0)
+        const todayMinutes = sessions.filter((s:any) => s.date.startsWith(localDateStr)).reduce((sum:any, s:any) => sum + s.duration_minutes, 0)
+        const totalMinutes = sessions.reduce((sum:any, s:any) => sum + s.duration_minutes, 0)
         const streak = calculateStreak(sessions)
 
         // محاسبه XP و لِوِل
