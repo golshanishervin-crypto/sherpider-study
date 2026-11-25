@@ -3,7 +3,7 @@ import { Send, X, Sparkles, Volume2, VolumeX } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { getSubjects } from '../lib/subjects'
-import { createMiles } from '../lib/miles/engine'
+import { miles } from '../lib/miles/engine'
 
 const SpiderIcon = ({ size = 28, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -84,18 +84,17 @@ export default function MilesAI({ user, onNavigate }: { user: any, onNavigate: (
       await supabase.from('homework').insert([{ user_id: user.id, title, subject, priority: 'medium', due_date: due ? due.toISOString() : new Date().toISOString(), status: 'pending' }])
     }
   }
-const miles = useMemo(() => createMiles({
-    userName: user.name,
-    subjects: getSubjects(user.grade, user.major, user.year),
-    getData,
-    actions
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [user.id])
+const miles = {
+  userName: user.name,
+  subjects: getSubjects(user.grade, user.major, user.year),
+  getData,
+  actions
+};
 
   useEffect(() => {
     if (isOpen && !hasProacted) {
       setHasProacted(true)
-      miles.proactive().then((p: any) => {
+      miles.getData().then((p: any) => {
         if (p) addMessage('ai', p.text, p.quickReplies)
       }).catch(console.error)
     }
