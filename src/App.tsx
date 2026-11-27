@@ -8,6 +8,7 @@ import ConfirmDialog from './components/ConfirmDialog'
 import EducationSelector from './components/EducationSelector'
 import MilesAI from './components/MilesAI'
 import { useTranslation } from 'react-i18next'
+import BottomNav from './components/BottomNav'
 
 const HomeworkPage = lazy(() => import('./pages/Homework'))
 const ExamsPage = lazy(() => import('./pages/Exams'))
@@ -290,23 +291,19 @@ return (
         </Suspense>
       </main>
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-lg bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xl rounded-full shadow-2xl border border-white/40 dark:border-neutral-700/50 z-50 px-2 py-2 flex justify-between items-center">
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.85 }} onClick={() => handleNav('dashboard')} className={"flex flex-col items-center justify-center w-14 h-12 rounded-full transition-colors " + (currentPage === 'dashboard' ? "text-primary" : "text-gray-400 hover:text-ink dark:hover:text-white")}>
-          <Home size={22} className={currentPage === 'dashboard' ? "fill-primary/20" : ""} />
-        </motion.button>
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.85 }} onClick={() => handleNav('homework')} className={"flex flex-col items-center justify-center w-14 h-12 rounded-full transition-colors " + (currentPage === 'homework' ? "text-primary" : "text-gray-400 hover:text-ink dark:hover:text-white")}>
-          <BookOpen size={22} className={currentPage === 'homework' ? "fill-primary/20" : ""} />
-        </motion.button>
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.85 }} onClick={() => handleNav('timer')} className={"flex flex-col items-center justify-center w-14 h-12 rounded-full transition-colors " + (currentPage === 'timer' ? "text-primary" : "text-gray-400 hover:text-ink dark:hover:text-white")}>
-          <Clock size={22} className={currentPage === 'timer' ? "fill-primary/20" : ""} />
-        </motion.button>
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.85 }} onClick={() => handleNav('calendar')} className={"flex flex-col items-center justify-center w-14 h-12 rounded-full transition-colors " + (currentPage === 'calendar' ? "text-primary" : "text-gray-400 hover:text-ink dark:hover:text-white")}>
-          <Calendar size={22} className={currentPage === 'calendar' ? "fill-primary/20" : ""} />
-        </motion.button>
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.85 }} onClick={() => setIsMenuOpen(true)} className="flex flex-col items-center justify-center w-14 h-12 rounded-full text-gray-400 hover:text-ink dark:hover:text-white transition-colors">
-          <Menu size={22} />
-        </motion.button>
-      </div>
+      <div className="md:hidden">
+  <BottomNav
+    active={currentPage}
+    onSelect={(id) => (id === 'menu' ? setIsMenuOpen(true) : handleNav(id))}
+    items={[
+      { id: 'dashboard', label: 'خانه', icon: <Home size={22} /> },
+      { id: 'homework', label: 'تکالیف', icon: <BookOpen size={22} /> },
+      { id: 'timer', label: 'تایمر', icon: <Clock size={22} /> },
+      { id: 'calendar', label: 'تقویم', icon: <Calendar size={22} /> },
+      { id: 'menu', label: 'منو', icon: <Menu size={22} /> },
+    ]}
+  />
+</div>
       
 <MilesAI user={user} onNavigate={handleNav} />
 

@@ -32,6 +32,7 @@
     "noData": "No data to display"
   },
   "dashboard": {
+    "consecutiveDays": "Streak",
     "hello": "Hello",
     "dear": "Dear",
     "student": "Student",
