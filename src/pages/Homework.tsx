@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Plus, CheckCircle, Clock, Trash2, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import JalaliDateInput from '../components/JalaliDateInput';
 
 export default function HomeworkPage({ user }: { user: any }) {
   const [isAdding, setIsAdding] = useState(false)
@@ -69,7 +70,10 @@ const handleAdd = async (e: React.FormEvent) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div><label className="block text-sm mb-1">عنوان</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full p-2 rounded-input border dark:bg-neutral-800" required /></div>
               <div><label className="block text-sm mb-1">درس</label><select value={subject} onChange={e => setSubject(e.target.value)} className="w-full p-2 rounded-input border dark:bg-neutral-800">{availableSubjects.map((s, i) => <option key={i} value={s}>{s}</option>)}</select></div>
-              <div><label className="block text-sm mb-1">تاریخ</label><input type="datetime-local" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full p-2 rounded-input border dark:bg-neutral-800 outline-none" required /></div>
+              <JalaliDateInput 
+  value={dueDate} 
+  onChange={(newDate) => setDueDate(newDate)} 
+/>
               <div><label className="block text-sm mb-1">اهمیت</label><select value={priority} onChange={e => setPriority(e.target.value as any)} className="w-full p-2 rounded-input border dark:bg-neutral-800"><option value="low">کم</option><option value="medium">متوسط</option><option value="high">زیاد</option></select></div>
             </div>
             <div className="flex gap-2 justify-end mt-4"><button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2 rounded-input hover:bg-gray-200 dark:hover:bg-neutral-800">انصراف</button><button type="submit" className="btn-primary">ذخیره</button></div>

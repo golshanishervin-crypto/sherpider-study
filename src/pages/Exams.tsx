@@ -5,6 +5,7 @@ import { Plus, Calendar, MapPin, Trash2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 import ConfirmDialog from '../components/ConfirmDialog'
+import JalaliDateInput from '../components/JalaliDateInput';
 
 export default function ExamsPage({ user }: { user: any }) {
   const [isAdding, setIsAdding] = useState(false)
@@ -105,7 +106,10 @@ export default function ExamsPage({ user }: { user: any }) {
               
               <div>
                 <label htmlFor="exam-date" className="block text-sm mb-1">تاریخ و ساعت</label>
-                <input id="exam-date" type="datetime-local" value={examDate} onChange={e => setExamDate(e.target.value)} className="w-full p-2 rounded-input border dark:bg-neutral-800 outline-none" required />
+                <JalaliDateInput 
+  value={examDate} 
+  onChange={(newDate) => setExamDate(newDate)} 
+/>
               </div>
               
               <div>

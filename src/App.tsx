@@ -299,8 +299,8 @@ return (
       { id: 'dashboard', label: 'خانه', icon: <Home size={22} /> },
       { id: 'homework', label: 'تکالیف', icon: <BookOpen size={22} /> },
       { id: 'timer', label: 'تایمر', icon: <Clock size={22} /> },
-      { id: 'calendar', label: 'تقویم', icon: <Calendar size={22} /> },
-      { id: 'menu', label: 'منو', icon: <Menu size={22} /> },
+      { id: 'timetable', label: 'تقویم', icon: <Calendar size={22} /> },
+      { id: 'profile', label: 'پروفایل', icon: <User size={22} /> },
     ]}
   />
 </div>
